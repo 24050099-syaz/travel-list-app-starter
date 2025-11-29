@@ -1,7 +1,9 @@
+import { useState } from "react";
+
 // Initial packing items
 const initialItems = [
   { id: 1, description: "Shirt", quantity: 5, packed: false },
-  { id: 2, description: "Pants", quantity: 2, packed: false },
+  { id: 2, description: "Pants", quantity: 2, packed: true},
 ];
 
 function Logo() {
@@ -9,19 +11,50 @@ function Logo() {
 }
 
 function Form() {
+  const [description,setDescription] = useState("")
+  const [quantity,setQuantity] = useState(1)
+
+  function handleSubmit(e){
+    e.preventDefault()
+  }
+
   return (
-    <form className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need to pack?</h3>
+
+      <select value={quantity} onChange = {(e) => setQuantity(Number(e.target.value))}>
+        <option value={1}>1</option>
+        <option value={2}>2</option>
+        <option value={3}>3</option>
+      </select>
+
+      <input 
+        type="text" 
+        placeholder="Item..." 
+        value={description} 
+        onChange={(e)=> setDescription(e.target.value)}/>
+
+      <button>add</button>
+
     </form>
   );
 }
+
+function Item({
+  item
+}) {
+  return <li style={item.packed ? {textDecoration:'line-through'} : {} }>{item.description} ({item.quantity})</li>
+}
+
+
+
 
 function PackingList() {
   return (
     <div className="list">
       <ul>
         {initialItems.map((item) => (
-          <li>{item.description}</li>
+          <Item item={item}/>
         ))}
       </ul>
     </div>
